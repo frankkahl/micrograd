@@ -23,10 +23,17 @@ help, but don't jump ahead and write the finished micrograd unless asked.
 
 ## Environment
 
-- Python virtual environment in `.venv/` (managed with `uv`), used as the PyCharm
-  project interpreter and as the Jupyter kernel.
-- Dependencies are listed in `requirements.txt`; install/update with
-  `uv pip install -r requirements.txt` (PyTorch from the CPU wheel index, see the file).
+- uv project: dependencies are declared in `pyproject.toml` and pinned in `uv.lock`
+  (both committed). Use `uv add` / `uv remove` to change dependencies, `uv sync` to
+  rebuild the environment, and `uv lock --upgrade && uv sync` to upgrade.
+- Python 3.15 virtual environment in `.venv/` (uv-managed interpreter), used as the
+  PyCharm project interpreter (a uv interpreter) and as the Jupyter kernel
+  "Python (micrograd)", registered inside the venv with `--sys-prefix`.
+- PyTorch is the CUDA 13.0 build (`+cu130`) for the RTX 4060 GPU. Only `torch` comes
+  from the PyTorch index: it is declared `explicit = true` and mapped to torch via
+  `[tool.uv.sources]`, so everything else, including torch's own dependencies, comes
+  from PyPI. The `cuda-toolkit` / `nvidia-*` packages are pinned by torch to CUDA 13.0
+  and must not be upgraded on their own (e.g. via PyCharm's upgrade button).
 - `graphviz` (used for `draw_dot` visualisation of the computation graph) needs the
   system `dot` binary, which is installed at `/usr/bin/dot`.
 - Notebook work happens in `micrograd.ipynb`, opened in PyCharm with the `.venv`

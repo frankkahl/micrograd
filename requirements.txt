@@ -1,7 +1,0 @@
---extra-index-url https://download.pytorch.org/whl/cpu
-numpy
-matplotlib
-graphviz
-torch
-jupyter
-ipykernel
